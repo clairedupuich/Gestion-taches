@@ -1,0 +1,398 @@
+openapi: 3.0.0
+info:
+  title: Task Management API
+  description: API REST pour l'application de gestion de tâches / 任务管理应用的REST API
+  version: 1.0.0
+  contact:
+    name: Équipe de Développement / 开发团队
+    email: clairedupuich9@gmail.com
+
+servers:
+  - url: http://localhost:3000/api
+    description: Serveur de développement / 开发服务器
+
+paths:
+  /tasks:
+    get:
+      summary: Récupérer toutes les tâches / 获取所有任务
+      description: Retourne la liste de toutes les tâches / 返回所有任务的列表
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: Succès / 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TasksResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    post:
+      summary: Créer une nouvelle tâche / 创建新任务
+      description: Crée une nouvelle tâche dans le système / 在系统中创建新任务
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Tâche créée avec succès / 任务创建成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Données invalides / 数据无效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation échouée / 验证失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tasks/{id}:
+    get:
+      summary: Récupérer une tâche spécifique / 获取特定任务
+      description: Retourne une tâche par son ID / 根据ID返回任务
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tâche / 任务ID
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Succès / 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '404':
+          description: Tâche non trouvée / 任务未找到
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    put:
+      summary: Mettre à jour une tâche / 更新任务
+      description: Met à jour complètement une tâche existante / 完全更新现有任务
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tâche / 任务ID
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Tâche mise à jour avec succès / 任务更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Données invalides / 数据无效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Tâche non trouvée / 任务未找到
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    delete:
+      summary: Supprimer une tâche / 删除任务
+      description: Supprime une tâche du système / 从系统中删除任务
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tâche / 任务ID
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Tâche supprimée avec succès / 任务删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '404':
+          description: Tâche non trouvée / 任务未找到
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tasks/{id}/complete:
+    patch:
+      summary: Marquer une tâche comme terminée / 标记任务为完成
+      description: Marque une tâche comme terminée / 将任务标记为完成
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tâche / 任务ID
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Tâche marquée comme terminée / 任务标记为完成
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteTaskResponse'
+        '404':
+          description: Tâche non trouvée / 任务未找到
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erreur interne du serveur / 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    # Schémas de requête / 请求模式
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Titre de la tâche / 任务标题
+          maxLength: 255
+          example: "Acheter du lait"
+        description:
+          type: string
+          description: Description détaillée / 详细描述
+          example: "Acheter du lait au supermarché"
+        completed:
+          type: boolean
+          description: Statut d'achèvement / 完成状态
+          default: false
+          example: false
+    
+    UpdateTaskRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Titre de la tâche / 任务标题
+          maxLength: 255
+          example: "Tâche mise à jour"
+        description:
+          type: string
+          description: Description détaillée / 详细描述
+          example: "Nouvelle description"
+        completed:
+          type: boolean
+          description: Statut d'achèvement / 完成状态
+          example: true
+
+    # Schémas de réponse / 响应模式
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID unique de la tâche / 任务唯一ID
+          example: 1
+        title:
+          type: string
+          description: Titre de la tâche / 任务标题
+          example: "Acheter du lait"
+        description:
+          type: string
+          description: Description détaillée / 详细描述
+          example: "Acheter du lait au supermarché"
+        completed:
+          type: boolean
+          description: Statut d'achèvement / 完成状态
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          description: Date de création / 创建日期
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date de mise à jour / 更新日期
+          example: "2024-01-15T10:30:00Z"
+    
+    TasksResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        count:
+          type: integer
+          description: Nombre de tâches / 任务数量
+          example: 5
+    
+    TaskResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Tâche créée avec succès"
+        data:
+          $ref: '#/components/schemas/Task'
+    
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Tâche supprimée avec succès"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+    
+    CompleteTaskResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Tâche marquée comme terminée"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            completed:
+              type: boolean
+              example: true
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2024-01-15T12:00:00Z"
+
+    # Schéma d'erreur / 错误模式
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Code d'erreur machine / 机器可读错误代码
+              example: "TASK_NOT_FOUND"
+            message:
+              type: string
+              description: Message d'erreur humain / 人类可读错误消息
+              example: "La tâche avec l'ID 999 n'a pas été trouvée"
+            details:
+              type: object
+              description: Détails supplémentaires de l'erreur / 错误附加详情
+              example: {"field": "title", "constraint": "required"}
+
+  parameters:
+    TaskIdPath:
+      name: id
+      in: path
+      required: true
+      description: ID de la tâche / 任务ID
+      schema:
+        type: integer
+        minimum: 1
+
+tags:
+  - name: Tasks
+    description: Opérations sur les tâches / 任务操作
+
+# Règles de validation / 验证规则
+# - Titre: requis, maximum 255 caractères
+# - Description: optionnel
+# - Completed: optionnel, booléen, défaut false
+# - ID: entier positif requis pour les opérations spécifiques

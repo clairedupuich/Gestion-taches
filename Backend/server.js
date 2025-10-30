@@ -33,16 +33,7 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Gestion des routes non trouvées / 处理未找到的路由
-app.use('*', (req, res) => {
-    res.status(404).json({
-        success: false,
-        error: {
-            code: 'ROUTE_NOT_FOUND',
-            message: 'Route non trouvée / 路由未找到'
-        }
-    });
-});
+
 
 // Middleware de gestion d'erreurs global / 全局错误处理中间件
 app.use((error, req, res, next) => {
@@ -52,6 +43,18 @@ app.use((error, req, res, next) => {
         error: {
             code: 'INTERNAL_ERROR',
             message: 'Erreur interne du serveur / 服务器内部错误'
+        }
+    });
+});
+
+
+// 404 处理中间件 - 放在所有路由之后. Gestion des routes non trouvées / 处理未找到的路由
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        error: {
+            code: 'ROUTE_NOT_FOUND',
+            message: `Route ${req.method} ${req.path} non trouvée`
         }
     });
 });

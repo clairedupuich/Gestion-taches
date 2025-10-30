@@ -56,7 +56,10 @@ function testLocalAPI() {
 // 第二部分：Fetch API（Async/Await） - 用于真实API
 // Fonction pour récupérer des tâches avec async/await / 使用async/await获取任务的函数
 async function fetchTaskFromAPI() {
+    //使用JSONPlaceholder测试，以此来进行前端开发的测试。
     const apiUrl = 'https://jsonplaceholder.typicode.com/todos/1';
+    // 替换后  以下地址链接我们自己的后端，最好是所有开发完成后，进行前后端集成替换，那时用个全局配置就可以了。
+    //const apiUrl = 'http://localhost:3000/api/tasks/1';
     
     console.log('Début de la requête Fetch API... / Fetch API请求开始...');
     
