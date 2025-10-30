@@ -9,16 +9,16 @@ class TaskModel {
                 title: 'Acheter du lait',
                 description: 'Acheter du lait au supermarché',
                 completed: false,
-                createdAt: new Date('2024-01-15T10:30:00Z'),
-                updatedAt: new Date('2024-01-15T10:30:00Z')
+                createdAt: new Date(),           // 当前时间
+                updatedAt: new Date()
             },
             {
                 id: 2,
                 title: 'Faire les devoirs',
                 description: 'Terminer le projet JavaScript',
                 completed: true,
-                createdAt: new Date('2024-01-14T15:20:00Z'),
-                updatedAt: new Date('2024-01-15T09:15:00Z')
+                createdAt: new Date(),           // 每次重新运行时都是“今天”
+                updatedAt: new Date()
             }
         ];
         this.nextId = 3; // Prochain ID à attribuer / 下一个分配的ID
