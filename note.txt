@@ -1,0 +1,28 @@
+une application web complète de gestion de tâches (ToDo List). Ce projet vous permettra de mettre en œuvre l'ensemble des compétences essentielles du développement web moderne, depuis la création de l'interface utilisateur jusqu'à l'automatisation des tests.
+
+TodoApp/
+├── Frontend/                 # 前端代码
+│   ├── index.html           # 主页面
+│   ├── Css/
+│   │   ├── style.css        # 主样式文件
+│   │   └── responsive.css   # 响应式样式
+│   ├── Js/
+│   │   ├── app.js           # 主应用逻辑
+│   │   ├── api.js           # API通信模块
+│   │   └── ui.js            # 界面操作模块
+│   └── Assets/
+│       ├── Images/          # 图片资源
+│       └── Icons/           # 图标资源
+├── Backend/                 # 后端代码
+│   ├── server.js           # 服务器主文件
+│   ├── routes.js           # 任务路由（直接文件）
+│   ├── models.js           # 数据模型（直接文件）
+│   └── package.json        # 后端依赖
+├── Tests/                  # 测试相关
+│   ├── Api/
+│   │   ├── tasks.postman_collection.json  # Postman集合
+│   │   └── environment.postman_environment.json
+│   ├── Newman/             # Newman测试配置
+│   │   └── ci-config.json
+│   └── Reports/            # 测试报告输出目录
+└── README.md               # 项目说明

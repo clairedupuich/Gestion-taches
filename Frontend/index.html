@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Tâches</title>
+<link rel="stylesheet" href="Css/style.css">
+
+</head>
+<body>
+    <!-- En-tête principal -->
+    <header>
+        <h1>Gestionnaire de Tâches</h1>
+        <p>Organisez votre quotidien efficacement</p>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <!-- Formulaire d'ajout de tâches -->
+        <section class="add-task-section">
+            <form id="taskForm" class="task-form">
+                <div class="form-group">
+                    <label for="taskTitle">Nouvelle tâche :</label>
+                    <input 
+                        type="text" 
+                        id="taskTitle" 
+                        name="taskTitle" 
+                        placeholder="Entrez votre tâche..." 
+                        required
+                    >
+                </div>
+                <button type="submit" class="btn-primary">
+                    Ajouter la tâche
+                </button>
+            </form>
+        </section>
+
+        <!-- Zone d'affichage des tâches -->
+        <section class="tasks-section">
+            <h2>Mes Tâches</h2>
+            <div class="tasks-container">
+                <ul id="tasksList" class="tasks-list">
+                    <!-- Les tâches seront ajoutées dynamiquement ici -->
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Gestionnaire de Tâches - Tous droits réservés</p>
+            <p>Application développée avec HTML5, CSS3 et JavaScript</p>
+        </div>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script src="Js/app.js"></script>
+    <script src="Js/ui.js"></script>                 
+    <script type="module" src="Js/api.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+une application web complète de gestion de tâches (ToDo List). Ce projet vous permettra de mettre en œuvre l'ensemble des compétences essentielles du développement web moderne, depuis la création de l'interface utilisateur jusqu'à l'automatisation des tests.
