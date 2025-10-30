@@ -1,8 +1,7 @@
 # 忽略个人笔记文件
-node.txt
+note.txt
 
 # 同时建议添加其他常见的忽略项
-node_modules/
-.DS_Store
 *.log
+*.txt
 .env
