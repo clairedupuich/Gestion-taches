@@ -21,21 +21,15 @@ jobs:
         node-version: '18'
         cache: 'npm'
 
-    - name: Install all dependencies
+    - name: Install dependencies
       run: |
-        # 安装根目录依赖
-        npm install jest supertest newman newman-reporter-htmlextra --save-dev
-        # 安装后端依赖
-        cd Backend && npm install express cors body-parser
+        npm install
 
-    - name: List node_modules to verify installation
-      run: ls -la node_modules/.bin/ | grep jest
+    - name: Run unit tests via npm script
+      run: npm run test:unit -- --coverage --coverageDirectory=Tests/coverage
 
-    - name: Run unit tests with full path
-      run: ./node_modules/.bin/jest Tests/Unit/ --coverage --coverageDirectory=Tests/coverage
-
-    - name: Run integration tests
-      run: ./node_modules/.bin/jest Tests/Integration/
+    - name: Run integration tests via npm script
+      run: npm run test:integration
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
@@ -58,8 +52,8 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install Newman globally
-      run: npm install -g newman newman-reporter-htmlextra
+    - name: Install dependencies
+      run: npm install
 
     - name: Start backend server
       run: |
@@ -74,7 +68,7 @@ jobs:
         curl -f http://localhost:3000/health || exit 1
 
     - name: Run Newman tests
-      run: newman run Tests/Api/tasks.postman_collection.json -e Tests/Api/master-task-environment.json -r htmlextra,cli --reporter-htmlextra-export Tests/Newman-reports/ci-report.html
+      run: npx newman run Tests/Api/tasks.postman_collection.json -e Tests/Api/master-task-environment.json -r htmlextra,cli --reporter-htmlextra-export Tests/Newman-reports/ci-report.html
 
     - name: Upload Newman reports
       uses: actions/upload-artifact@v4
