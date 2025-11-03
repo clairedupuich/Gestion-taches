@@ -22,14 +22,10 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: |
-        npm install
+      run: npm install
 
-    - name: Run unit tests via npm script
-      run: npm run test:unit -- --coverage --coverageDirectory=Tests/coverage
-
-    - name: Run integration tests via npm script
-      run: npm run test:integration
+    - name: Run tests via Node.js
+      run: node Tests/run-jest.js
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
