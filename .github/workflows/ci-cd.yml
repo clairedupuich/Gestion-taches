@@ -1,33 +1,44 @@
 name: CI/CD Pipeline - Task Management App
+# Pipeline CI/CD pour l'application de gestion de tâches / 任务管理应用的CI/CD流水线
 
 on:
   push:
     branches: [ main, develop ]
+    # Exécuter sur les branches principales / 在主分支上运行
   pull_request:
     branches: [ main ]
+    # Exécuter sur les pull requests / 在Pull Request上运行
 
 jobs:
   test-backend:
     name: Backend Tests
+    # Tests du backend / 后端测试
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
+      # Vérifier le code / 检出代码
       uses: actions/checkout@v4
 
     - name: Setup Node.js
+      # Configurer Node.js / 设置Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
 
     - name: Install dependencies
+      # Installer les dépendances / 安装依赖
       run: npm install
 
     - name: Run tests via Node.js
+      # Exécuter les tests via Node.js / 通过Node.js运行测试
+      # Utilise notre exécuteur personnalisé pour éviter les problèmes de permissions
+      # 使用自定义运行器避免权限问题
       run: node Tests/run-jest.js
 
     - name: Upload coverage reports
+      # Télécharger les rapports de couverture / 上传覆盖率报告
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
@@ -36,8 +47,10 @@ jobs:
 
   test-api:
     name: API E2E Tests
+    # Tests E2E de l'API / API端到端测试
     runs-on: ubuntu-latest
     needs: test-backend
+    # Dépend des tests backend / 依赖后端测试
     
     steps:
     - name: Checkout code
@@ -52,23 +65,31 @@ jobs:
       run: npm install
 
     - name: Start backend server
+      # Démarrer le serveur backend / 启动后端服务器
       run: |
         cd Backend
         npm install
+        # Démarrer le serveur en arrière-plan / 后台启动服务器
         nohup node server.js > server.log 2>&1 &
-        sleep 10
-        cat server.log
+        sleep 10  # Attendre le démarrage / 等待启动完成
+        cat server.log  # Afficher les logs / 显示日志
 
     - name: Verify server is running
+      # Vérifier que le serveur fonctionne / 验证服务器运行状态
       run: |
         curl -f http://localhost:3000/health || exit 1
 
     - name: Run Newman tests
+      # Exécuter les tests Newman / 运行Newman测试
       run: npx newman run Tests/Api/tasks.postman_collection.json -e Tests/Api/master-task-environment.json -r htmlextra,cli --reporter-htmlextra-export Tests/Newman-reports/ci-report.html
 
     - name: Upload Newman reports
+      # Télécharger les rapports Newman / 上传Newman报告
       uses: actions/upload-artifact@v4
       with:
         name: newman-reports
         path: Tests/Newman-reports/
         retention-days: 30
+
+  # Optionnel : Ajouter des notifications par email/Slack ici
+  # Optional: Add email/Slack notifications here / 可选：在此添加邮件/Slack通知
