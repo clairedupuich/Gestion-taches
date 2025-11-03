@@ -11,8 +11,8 @@
     "express": "^5.1.0"
   },
   "scripts": {
-    "test:unit": "jest Tests/Unit/",
-    "test:integration": "jest Tests/Integration/",
+    "test:unit": "npx jest Tests/Unit/",
+    "test:integration": "npx jest Tests/Integration/",
     "test:newman": "node Tests/Newman/run-tests.js",
     "test:newman:simple": "npx newman run Tests/Api/tasks.postman_collection.json -e Tests/Api/master-task-environment.json -r htmlextra,cli",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:newman"
