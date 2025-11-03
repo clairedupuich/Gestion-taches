@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "2128742d-ae17-49e6-8995-843db4b291cd",
+		"name": "API Master Task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49499368",
+		"_collection_link": "https://clairedupuich9-4388317.postman.co/workspace/Claire-Dupuich's-Workspace~7bf9e952-3981-4c9a-8f68-c856e001f3f0/collection/49499368-2128742d-ae17-49e6-8995-843db4b291cd?action=share&source=collection_link&creator=49499368"
+	},
+	"item": [
+		{
+			"name": "Tasks CRUD",
+			"item": [
+				{
+					"name": "GET All Tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Vérifier le code de statut\r",
+									"pm.test(\"Status is 200\", function() {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Vérifier que c'est du JSON\r",
+									"pm.test(\"Response is JSON\", function() {\r",
+									"  pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has correct structure\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('success', true);\r",
+									"    pm.expect(jsonData).to.have.property('data').that.is.an('array');\r",
+									"    pm.expect(jsonData).to.have.property('count').that.is.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each task has required fields\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.data.forEach(task => {\r",
+									"        pm.expect(task).to.have.property('id').that.is.a('number');\r",
+									"        pm.expect(task).to.have.property('title').that.is.a('string');\r",
+									"        pm.expect(task).to.have.property('completed').that.is.a('boolean');\r",
+									"        pm.expect(task).to.have.property('createdAt').that.is.a('string');\r",
+									"        pm.expect(task).to.have.property('updatedAt').that.is.a('string');\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests pour POST\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has success true\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"New task has ID\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.have.property('id');\r",
+									"    pm.expect(jsonData.data.id).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Task has all required fields\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    const task = jsonData.data;\r",
+									"    pm.expect(task).to.have.property('title', 'Tâche de test Postman');\r",
+									"    pm.expect(task).to.have.property('description', 'Cette tâche a été créée via Postman');\r",
+									"    pm.expect(task).to.have.property('completed', false);\r",
+									"    pm.expect(task).to.have.property('createdAt');\r",
+									"    pm.expect(task).to.have.property('updatedAt');\r",
+									"});\r",
+									"\r",
+									"// Sauvegarder l'ID pour les requêtes suivantes\r",
+									"const responseData = pm.response.json();\r",
+									"pm.environment.set(\"lastTaskId\", responseData.data.id);\r",
+									"console.log(\"Task ID sauvegardé:\", responseData.data.id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Tâche de test Postman\",\r\n  \"description\": \"Cette tâche a été créée via Postman\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Creation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"title\": \"Tâche de test Postman\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/{{lastTaskId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"{{lastTaskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Task is updated successfully\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.message).to.include('mise à jour');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Updated fields are correct\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    const task = jsonData.data;\r",
+									"    pm.expect(task.title).to.eql('Tâche modifiée via Postman');\r",
+									"    pm.expect(task.description).to.eql('Description mise à jour');\r",
+									"    pm.expect(task.completed).to.eql(true);\r",
+									"    pm.expect(task.updatedAt).to.not.eql(task.createdAt);\r",
+									"});\r",
+									"\r",
+									"console.log(\"Task modifiée avec ID:\", pm.environment.get(\"taskId\"));"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Tâche modifiée via Postman\",\r\n  \"description\": \"Description mise à jour\",\r\n  \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/{{lastTaskId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"{{lastTaskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests pour DELETE\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Delete response is correct\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.message).to.include('supprimée');\r",
+									"    pm.expect(jsonData.data.id).to.eql(pm.environment.get(\"lastTaskId\"));\r",
+									"});\r",
+									"\r",
+									"// Vérifier que la tâche est vraiment supprimée\r",
+									"setTimeout(() => {\r",
+									"    pm.sendRequest({\r",
+									"        url: `http://localhost:3000/api/tasks/${pm.environment.get(\"lastTaskId\")}`,\r",
+									"        method: 'GET'\r",
+									"    }, function (err, response) {\r",
+									"        pm.test(\"Task is really deleted\", function () {\r",
+									"            pm.expect(response.code).to.eql(404);\r",
+									"        });\r",
+									"    });\r",
+									"}, 500);\r",
+									"\r",
+									"console.log(\"Task supprimée avec ID:\", pm.environment.get(\"lastTaskId\"));"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/{{lastTaskId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"{{lastTaskId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "lastTaskId",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,27 @@
+{
+	"id": "3641c192-8bd4-4e3f-bb58-fb7d426719ae",
+	"name": "Master Task",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "taskId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "lastTaskId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-11-03T13:19:06.055Z",
+	"_postman_exported_using": "Postman/11.69.7"
+}
