@@ -1,3 +1,4 @@
+// 本地开发环境使用
 // Tests/Newman/run-tests.js
 // Script pour exécuter les tests Newman automatisés / Newman自动化测试执行脚本
 

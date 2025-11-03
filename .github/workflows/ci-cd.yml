@@ -1,0 +1,99 @@
+name: CI/CD Pipeline - Task Management App
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Job 1: 运行单元测试和集成测试
+  test-backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm install
+        cd Backend && npm install
+
+    - name: Run unit tests
+      run: npm run test:unit -- --coverage
+
+    - name: Run integration tests  
+      run: npm run test:integration
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/
+        retention-days: 30
+
+  # Job 2: 运行Newman API测试
+  test-api:
+    name: API E2E Tests
+    runs-on: ubuntu-latest
+    needs: test-backend  # 依赖后端测试成功
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install newman newman-reporter-htmlextra --save-dev
+
+    - name: Start backend server
+      run: |
+        cd Backend
+        npm install
+        nohup node server.js > server.log 2>&1 &
+        sleep 10  # 等待服务器启动
+        cat server.log
+
+    - name: Verify server is running
+      run: |
+        curl -f http://localhost:3000/health || exit 1
+
+    - name: Run Newman tests
+      run: node Tests/Newman/ci-newman.js
+
+    - name: Upload Newman reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: newman-reports
+        path: Tests/Newman-reports/
+        retention-days: 30
+
+  # Job 3: 安全扫描（可选）
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: test-api
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run npm audit
+      run: npm audit --audit-level=moderate
+
+    - name: Run security scan
+      uses: actions/dependency-review-action@v3
