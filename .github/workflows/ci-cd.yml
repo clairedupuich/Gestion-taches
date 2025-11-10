@@ -5,9 +5,7 @@ on:
   push:
     branches: [ main, develop ]
     # Exécuter sur les branches principales / 在主分支上运行
-  pull_request:
-    branches: [ main ]
-    # Exécuter sur les pull requests / 在Pull Request上运行
+ 
 
 jobs:
   test-backend:
